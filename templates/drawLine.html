@@ -4,11 +4,11 @@
 {% block content %}
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}Drawwing Line{% endblock %}</title>
+  <title>{% block title %}Drawing Line{% endblock %}</title>
 </head>
 <body>
 
-<h1>Drawwing Line</h1>
+<h1>Drawing Continuous Line</h1>
 <div id="canvasUpper" style="stroke: red; width: 500px; height: 500px; border-style: solid;border-width: 5px;">
   <canvas  id="myCanvas" width="500" height="500"
            style="border:1px solid #c3c3c3;">
@@ -33,8 +33,11 @@
   var canvas = document.getElementById("myCanvas");
   var ctx = canvas.getContext("2d");
 
-  var gameState = "on";
-  var gameState = "off";
+  var rect = canvas.getBoundingClientRect();
+  console.log(rect.top, rect.right, rect.bottom, rect.left);
+
+  var xDisplay = document.getElementById("x_coord")
+  var yDisplay = document.getElementById("y_coord")
 
   // on start
   function int(){
@@ -43,8 +46,6 @@
   }
 
   int()
-
-
 
   // reference: https://stackoverflow.com/questions/3583724/how-do-i-add-a-delay-in-a-javascript-loop
   var i = 1;                  //  set your counter to 1
@@ -93,20 +94,6 @@
     }
   }
 
-  function drawLine(initalX, initalY, finalX, finalY){
-    drawBack(coordStore)
-
-    // set line stroke and line width
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 5;
-
-    // draw a red line
-    ctx.beginPath();
-    ctx.moveTo(initalX, initalY);
-    ctx.lineTo(finalX, finalY);
-    ctx.stroke();
-  }
-
   function drawLineNoBack(initalX, initalY, finalX, finalY){
     // set line stroke and line width
     ctx.strokeStyle = 'red';
@@ -119,23 +106,17 @@
     ctx.stroke();
   }
 
-  var score = 0;
-
-  var rect = canvas.getBoundingClientRect();
-  console.log(rect.top, rect.right, rect.bottom, rect.left);
-
-  var xDisplay = document.getElementById("x_coord")
-  var yDisplay = document.getElementById("y_coord")
-
-
   canvas.addEventListener("mousemove", function (e){
-
+    // getting the mouse position
     var x = Math.round(e.pageX - rect.left)
     var y = Math.round(e.pageY - rect.top)
     xDisplay.innerText = x
     yDisplay.innerText = y
 
+    // drawing the background based off previous stored coordinates
     drawBack(coordStore)
+
+    // drawing the current line based off user mouse position
     drawLineNoBack(coordStore[coordStore.length-2],coordStore[coordStore.length-1], x, y)
     //drawBack(coordStore)
   })
@@ -145,15 +126,20 @@
   })
 
   canvas.addEventListener("click", function (e){
+    // getting the mouse position
     var x = Math.round(e.pageX - rect.left)
     var y = Math.round(e.pageY - rect.top)
     xDisplay.innerText = x
     yDisplay.innerText = y
 
+    // adding mouse positions into the coordinate list
     coordStore.push(x)
     coordStore.push(y)
 
+    // update front end of coordinate list
     document.getElementById("coorStore").innerText = coordStore
+
+    // drawing the background
     drawBack(coordStore)
 
     //drawCircle(e.pageX, e.pageY)
@@ -172,12 +158,14 @@
     document.getElementById("canvasUpper").appendChild(newDiv);
   }
 
+  // adding coordinates to list in pair format
   function drawList(arr){
     const coordRow = document.createElement("li");
     coordRow.innerText = String(arr[arr.length-2]) + ","+String(arr[arr.length-1]);
     document.getElementById("displayCoordList").append(coordRow);
   }
 
+  // on init draw the list based off what is prepopulate in the coordinate list
   drawList(coordStore)
 </script>
 
