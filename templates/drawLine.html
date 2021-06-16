@@ -69,12 +69,12 @@
   }
 
   function drawBack(arr){
-    console.log("drawwing background")
+    //console.log("drawwing background")
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0,0,500,500);
 
     for (var i = 0; i<arr.length; i = i +2){
-      console.log(String(arr[i])+"," +String(arr[i+1])+"," +String(arr[i+2])+"," +String(arr[i+3]))
+      //console.log(String(arr[i])+"," +String(arr[i+1])+"," +String(arr[i+2])+"," +String(arr[i+3]))
       drawLineNoBack(arr[i], arr[i+1], arr[i+2], arr[i+3])
     }
 
@@ -127,8 +127,6 @@
   var xDisplay = document.getElementById("x_coord")
   var yDisplay = document.getElementById("y_coord")
 
-  var lowerBound = Number(c)-40;
-  var upperBound = Number(c)+40;
 
   canvas.addEventListener("mousemove", function (e){
 
@@ -140,6 +138,10 @@
     drawBack(coordStore)
     drawLineNoBack(coordStore[coordStore.length-2],coordStore[coordStore.length-1], x, y)
     //drawBack(coordStore)
+  })
+
+  canvas.addEventListener("mouseout", function (){
+    drawBack(coordStore)
   })
 
   canvas.addEventListener("click", function (e){
