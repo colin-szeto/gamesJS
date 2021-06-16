@@ -35,6 +35,13 @@
 
 <p id="game_state_display"></p>
 
+<button id="saveStore">save score</button>
+
+<h3>PastScores</h3>
+<ul id="scoreList">
+
+</ul>
+
 <script>
   // to enable drawing shapes on the canvas
   var canvas = document.getElementById("myCanvas");
@@ -193,14 +200,45 @@
       setTimeout(function(){
         gameState = "off";
         document.getElementById("game_state_display").innerText = gameState;
+        visibilySaveScore()
       }, Number(delay)*Number(numbLoops));
+      visibilySaveScore()
     }
 
   })
 
 
 </script>
+<script>
+  // appending score to the table of scores, will need to hook up backend to saves scores to a database
+  var saveScoreButton = document.getElementById("saveStore")
+  saveScoreButton.addEventListener("click", function (){
+    const newScore = document.createElement("li");
+    newScore.innerText = document.getElementById("score_display").innerText;
+    document.getElementById("scoreList").append(newScore);
+    visibilySaveScore()
+  })
 
+  var g = 0;
+  function visibilySaveScore(){
+
+    if (gameState == "on"){
+      saveScoreButton.disabled = true;
+    } else {
+      console.log(g)
+
+      //validator to ensure induvidual cannot spam append item into the list
+      if (Number(g) % 2 == 0){
+        saveScoreButton.disabled = true;
+      } else {
+      saveScoreButton.disabled = false;
+      }
+      g = Number(g)+1
+    }
+  }
+
+  visibilySaveScore()
+</script>
 </body>
 {% endblock %}
 </html>
