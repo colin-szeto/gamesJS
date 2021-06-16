@@ -98,10 +98,14 @@
     ctx.arc(mouseX,mousey,40,0,2*Math.PI);
     ctx.stroke();
 
-    //circle based off of pointer
-    ctx.beginPath();
-    ctx.arc(backgroundX,backgroundY,40,0,2*Math.PI);
-    ctx.stroke();
+
+
+    for (var i = 0; i<xCoord.length; i++){
+      //circle based off of pointer
+      ctx.beginPath();
+      ctx.arc(backgroundX[i],backgroundY[i],40,0,2*Math.PI);
+      ctx.stroke();
+    }
   }
 
   var xCoord = [50, 100, 200, 300, 400]
@@ -110,8 +114,8 @@
   // reference: https://stackoverflow.com/questions/3583724/how-do-i-add-a-delay-in-a-javascript-loop
   var counter = 1; //  set your counter to 1
   var c = [50, 50, 50, 50, 100] //  the y position of the circle, global varlaible
-  var numbLoops = 50; // number of loops
-  var delay = 100; // time between frames
+  var numbLoops = 100; // number of loops
+  var delay = 50; // time between frames
 
   console.log("coords incremnt: "+String(c))
   function myLoop(xCoord, yCoord,c) { //  create a loop function
@@ -150,7 +154,7 @@
   var lowerBound = Number(c)-40;
   var upperBound = Number(c)+40;
 
-  /*canvas.addEventListener("mousemove", function (e){
+  canvas.addEventListener("mousemove", function (e){
     //console.log("mouse over")
     //console.log(e.clientY - rect.top)
     //console.log(e.clientX - rect.left)
@@ -159,23 +163,24 @@
     xDisplay.innerText = x
     yDisplay.innerText = y
     //drawCircle(x, y)
-    drawCircleBackground(x, y, 250, c)
+    drawCircleBackground(x, y, xCoord, c)
 
     //where are the scoring areas
-    lowerBound = Number(c)-40
+    /*lowerBound = Number(c)-40
     upperBound = Number(c)+40
     document.getElementById("lowerBound").innerText = lowerBound
-    document.getElementById("upperBound").innerText = upperBound
-    if (gameState =="on"){
+    document.getElementById("upperBound").innerText = upperBound*/
+
+    /*if (gameState =="on"){
       if (lowerBound<y &&	y<upperBound &&220<x &&x<290){
         //updating back end of the score
         score = Number(score)+1
         //updating front end of score
         document.getElementById("score_display").innerText = score;
       }
-    }
+    }*/
 
-  })*/
+  })
 
   var buttonEll = document.getElementById("star_button")
   buttonEll.addEventListener("click", function (){
