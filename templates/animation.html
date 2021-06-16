@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Animations</title>
+</head>
+<body>
+
+<h1>Animation</h1>
+
+<canvas id="myCanvas" width="500" height="500"
+        style="border:1px solid #c3c3c3;">
+  Your browser does not support the canvas element.
+</canvas>
+
+<br>
+<span id="x_coord">___</span>
+<span>,</span>
+<span id="y_coord">___</span>
+
+<br>
+<button id="star_button">start game</button>
+
+<br>
+<span >score: </span>
+<span id="score_display">0</span>
+
+<br>
+<p>lower and upper bound</p>
+<span id="lowerBound">___</span>
+<span>,</span>
+<span id="upperBound">___</span>
+
+<p id="game_state_display"></p>
+
+<script>
+  // to enable drawing shapes on the canvas
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d");
+
+  var gameState = "on";
+  var gameState = "off";
+
+  // on start
+  function int(){
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,500,500);
+  }
+
+  int()
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+
+  function drawCircle(x, y){
+    //console.log("drawwing" + String(y))
+    //recoloring the background
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,500,500);
+
+    //drawwing the circle
+    ctx.beginPath();
+    ctx.arc(x,y,40,0,2*Math.PI);
+    ctx.stroke();
+  }
+
+  function drawCircleBackground(mouseX,mousey, backgroundX, backgroundY){
+    // blank background
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,500,500);
+
+    //circle based off of pointer
+    ctx.beginPath();
+    ctx.arc(mouseX,mousey,40,0,2*Math.PI);
+    ctx.stroke();
+
+    //circle based off of pointer
+    ctx.beginPath();
+    ctx.arc(backgroundX,backgroundY,40,0,2*Math.PI);
+    ctx.stroke();
+  }
+
+
+  // for (var i = 0; i<500; i++){
+  //   setTimeout(function() {
+  //   }, 100);
+  //     drawCircle(250, i)
+  // }
+
+  function staticDraw(){
+    console.log("starting static draw")
+    setTimeout(function() {
+      drawCircle(250, 0)
+    }, 1000);
+
+    setTimeout(function() {
+      drawCircle(250, 50)
+    }, 2000);
+
+    setTimeout(function() {
+      drawCircle(250, 100)
+    }, 3000);
+
+    setTimeout(function() {
+      drawCircle(250, 150)
+    }, 4000);
+  }
+
+  //staticDraw()
+
+
+  // reference: https://stackoverflow.com/questions/3583724/how-do-i-add-a-delay-in-a-javascript-loop
+  var i = 1;                  //  set your counter to 1
+  var c = 0                   //  the y position of the circle, global varlaible
+  var numbLoops = 50;                 // number of loops
+  var delay = 100; // time between frames
+
+  function myLoop() {         //  create a loop function
+    setTimeout(function() {   //  call a 3s setTimeout when the loop is called
+                              //  your code here
+
+      if (Number(c) == 550){
+        c = 0;
+      }
+      drawCircle(250, c)
+      c = Number(c)+50
+      i++;                    //  increment the counter
+      if (i < numbLoops) {           //  if the counter < 10, call the loop function
+        myLoop();             //  ..  again which will trigger another
+      }                       //  ..  setTimeout()
+    }, delay)
+  }
+
+
+  var score = 0;
+
+  var rect = canvas.getBoundingClientRect();
+  console.log(rect.top, rect.right, rect.bottom, rect.left);
+
+  var xDisplay = document.getElementById("x_coord")
+  var yDisplay = document.getElementById("y_coord")
+
+  var lowerBound = Number(c)-40;
+  var upperBound = Number(c)+40;
+
+  canvas.addEventListener("mousemove", function (e){
+    //console.log("mouse over")
+    //console.log(e.clientY - rect.top)
+    //console.log(e.clientX - rect.left)
+    var x = Math.round(e.pageX - rect.left)
+    var y = Math.round(e.pageY - rect.top)
+    xDisplay.innerText = x
+    yDisplay.innerText = y
+    //drawCircle(x, y)
+    drawCircleBackground(x, y, 250, c)
+
+    //where are the scoring areas
+    lowerBound = Number(c)-40
+    upperBound = Number(c)+40
+    document.getElementById("lowerBound").innerText = lowerBound
+    document.getElementById("upperBound").innerText = upperBound
+    if (gameState =="on"){
+      if (lowerBound<y &&	y<upperBound &&220<x &&x<290){
+        //updating back end of the score
+        score = Number(score)+1
+        //updating front end of score
+        document.getElementById("score_display").innerText = score;
+      }
+    }
+
+  })
+
+  var buttonEll = document.getElementById("star_button")
+  buttonEll.addEventListener("click", function (){
+    if (gameState=="off"){
+      // restarting the intial contants on each start
+      i = 1;
+      c = 0;
+
+      //reseting the score, setting up the front end
+      score = 0;
+      document.getElementById("score_display").innerText = score;
+
+      //starting the background
+      gameState = "on";
+      document.getElementById("game_state_display").innerText = gameState;
+      myLoop();
+
+      setTimeout(function(){
+        gameState = "off";
+        document.getElementById("game_state_display").innerText = gameState;
+      }, Number(delay)*Number(numbLoops));
+    }
+
+  })
+
+
+</script>
+
+</body>
+</html>

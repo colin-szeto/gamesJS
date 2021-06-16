@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+<h1>Hello there</h1>
+
+<canvas id="myCanvas" width="500" height="500"
+        style="border:1px solid #c3c3c3;">
+  Your browser does not support the canvas element.
+</canvas>
+
+
+<span id="x_coord">___</span>
+<span>,</span>
+<span id="y_coord">___</span>
+
+<script src="static/js/script.js">
+</script>
+
+<a href="/animation">animation</a>
+
+<script>
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d");
+
+  function int(){
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,500,500);
+  }
+
+  int()
+
+  function drawCircle(x, y){
+    //recoloring the background
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,500,500);
+
+    //drawwing the circle
+    ctx.beginPath();
+    ctx.arc(x,y,40,0,2*Math.PI);
+    ctx.stroke();
+  }
+
+  var rect = canvas.getBoundingClientRect();
+  console.log(rect.top, rect.right, rect.bottom, rect.left);
+
+  var xDisplay = document.getElementById("x_coord")
+  var yDisplay = document.getElementById("y_coord")
+
+  canvas.addEventListener("mousemove", function (e){
+    var x = Math.round(e.pageX - rect.left)
+    var y = Math.round(e.pageY - rect.top)
+    xDisplay.innerText = x
+    yDisplay.innerText = y
+    drawCircle(x, y)
+  })
+
+
+</script>
+
+</body>
+</html>
