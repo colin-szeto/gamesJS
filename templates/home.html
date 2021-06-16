@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+{% extends "base.html" %}
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
@@ -13,7 +15,7 @@
   Your browser does not support the canvas element.
 </canvas>
 
-
+<br>
 <span id="x_coord">___</span>
 <span>,</span>
 <span id="y_coord">___</span>
@@ -21,7 +23,7 @@
 <script src="static/js/script.js">
 </script>
 
-<a href="/animation">animation</a>
+<!--<a href="/animation">animation</a>-->
 
 <script>
   var canvas = document.getElementById("myCanvas");
@@ -63,4 +65,5 @@
 </script>
 
 </body>
+{% endblock %}
 </html>
