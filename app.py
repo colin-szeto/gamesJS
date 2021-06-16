@@ -14,6 +14,11 @@ def animation():
 def line():
     return render_template("drawLine.html")
 
+@app.route("/multiAnimation")
+def animationMulti():
+    return render_template("animationMulti.html")
+
+
 if __name__ == "__main__":
     # runs the application on the repl development server
     app.run(debug=True, host='127.0.0.1', port='5000')
