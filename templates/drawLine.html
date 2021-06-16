@@ -4,42 +4,28 @@
 {% block content %}
 <head>
   <meta charset="UTF-8">
-  <title>Drawwing Line</title>
+  <title>{% block title %}Drawwing Line{% endblock %}</title>
 </head>
 <body>
 
 <h1>Drawwing Line</h1>
+<div id="canvasUpper" style="stroke: red; width: 500px; height: 500px; border-style: solid;border-width: 5px;">
+  <canvas  id="myCanvas" width="500" height="500"
+           style="border:1px solid #c3c3c3;">
+    Your browser does not support the canvas element.
+  </canvas>
 
-<canvas id="myCanvas" width="500" height="500"
-        style="border:1px solid #c3c3c3;">
-  Your browser does not support the canvas element.
-</canvas>
+</div>
+
 
 <br>
 <span id="x_coord">___</span>
 <span>,</span>
 <span id="y_coord">___</span>
 
-<br>
-<button id="star_button">start game</button>
+<p id="coorStore"></p>
 
-<br>
-<span >score: </span>
-<span id="score_display">0</span>
-
-<br>
-<p>lower and upper bound</p>
-<span id="lowerBound">___</span>
-<span>,</span>
-<span id="upperBound">___</span>
-
-<p id="game_state_display"></p>
-
-<button id="saveStore">save score</button>
-
-<h3>PastScores</h3>
-<ul id="scoreList">
-
+<ul id="displayCoordList">
 </ul>
 
 <script>
@@ -58,66 +44,6 @@
 
   int()
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-
-  function drawCircle(x, y){
-    //console.log("drawwing" + String(y))
-    //recoloring the background
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0,0,500,500);
-
-    //drawwing the circle
-    ctx.beginPath();
-    ctx.arc(x,y,40,0,2*Math.PI);
-    ctx.stroke();
-  }
-
-  function drawCircleBackground(mouseX,mousey, backgroundX, backgroundY){
-    // blank background
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0,0,500,500);
-
-    //circle based off of pointer
-    ctx.beginPath();
-    ctx.arc(mouseX,mousey,40,0,2*Math.PI);
-    ctx.stroke();
-
-    //circle based off of pointer
-    ctx.beginPath();
-    ctx.arc(backgroundX,backgroundY,40,0,2*Math.PI);
-    ctx.stroke();
-  }
-
-
-  // for (var i = 0; i<500; i++){
-  //   setTimeout(function() {
-  //   }, 100);
-  //     drawCircle(250, i)
-  // }
-
-  function staticDraw(){
-    console.log("starting static draw")
-    setTimeout(function() {
-      drawCircle(250, 0)
-    }, 1000);
-
-    setTimeout(function() {
-      drawCircle(250, 50)
-    }, 2000);
-
-    setTimeout(function() {
-      drawCircle(250, 100)
-    }, 3000);
-
-    setTimeout(function() {
-      drawCircle(250, 150)
-    }, 4000);
-  }
-
-  //staticDraw()
 
 
   // reference: https://stackoverflow.com/questions/3583724/how-do-i-add-a-delay-in-a-javascript-loop
@@ -142,6 +68,56 @@
     }, delay)
   }
 
+  function drawBack(arr){
+    console.log("drawwing background")
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,500,500);
+
+    for (var i = 0; i<arr.length; i = i +2){
+      console.log(String(arr[i])+"," +String(arr[i+1])+"," +String(arr[i+2])+"," +String(arr[i+3]))
+      drawLineNoBack(arr[i], arr[i+1], arr[i+2], arr[i+3])
+    }
+
+  }
+
+  //var coordStore = [0,0]
+  var coordStore = [0,0,154,195,154,195]
+  document.getElementById("coorStore").innerText = coordStore
+  drawFromList(coordStore)
+
+  function drawFromList(arr){
+
+    for (var i = 0; i<arr.length; i = i +4){
+      console.log(String(arr[i])+"," +String(arr[i+1])+"," +String(arr[i+2])+"," +String(arr[i+3]))
+      drawLineNoBack(arr[i], arr[i+1], arr[i+2], arr[i+3])
+    }
+  }
+
+  function drawLine(initalX, initalY, finalX, finalY){
+    drawBack(coordStore)
+
+    // set line stroke and line width
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 5;
+
+    // draw a red line
+    ctx.beginPath();
+    ctx.moveTo(initalX, initalY);
+    ctx.lineTo(finalX, finalY);
+    ctx.stroke();
+  }
+
+  function drawLineNoBack(initalX, initalY, finalX, finalY){
+    // set line stroke and line width
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 5;
+
+    // draw a red line
+    ctx.beginPath();
+    ctx.moveTo(initalX, initalY);
+    ctx.lineTo(finalX, finalY);
+    ctx.stroke();
+  }
 
   var score = 0;
 
@@ -155,90 +131,54 @@
   var upperBound = Number(c)+40;
 
   canvas.addEventListener("mousemove", function (e){
-    //console.log("mouse over")
-    //console.log(e.clientY - rect.top)
-    //console.log(e.clientX - rect.left)
+
     var x = Math.round(e.pageX - rect.left)
     var y = Math.round(e.pageY - rect.top)
     xDisplay.innerText = x
     yDisplay.innerText = y
-    //drawCircle(x, y)
-    drawCircleBackground(x, y, 250, c)
 
-    //where are the scoring areas
-    lowerBound = Number(c)-40
-    upperBound = Number(c)+40
-    document.getElementById("lowerBound").innerText = lowerBound
-    document.getElementById("upperBound").innerText = upperBound
-    if (gameState =="on"){
-      if (lowerBound<y &&	y<upperBound &&220<x &&x<290){
-        //updating back end of the score
-        score = Number(score)+1
-        //updating front end of score
-        document.getElementById("score_display").innerText = score;
-      }
-    }
-
+    drawBack(coordStore)
+    drawLineNoBack(coordStore[coordStore.length-2],coordStore[coordStore.length-1], x, y)
+    //drawBack(coordStore)
   })
 
-  var buttonEll = document.getElementById("star_button")
-  buttonEll.addEventListener("click", function (){
-    if (gameState=="off"){
-      // restarting the intial contants on each start
-      i = 1;
-      c = 0;
+  canvas.addEventListener("click", function (e){
+    var x = Math.round(e.pageX - rect.left)
+    var y = Math.round(e.pageY - rect.top)
+    xDisplay.innerText = x
+    yDisplay.innerText = y
 
-      //reseting the score, setting up the front end
-      score = 0;
-      document.getElementById("score_display").innerText = score;
+    coordStore.push(x)
+    coordStore.push(y)
 
-      //starting the background
-      gameState = "on";
-      document.getElementById("game_state_display").innerText = gameState;
-      myLoop();
+    document.getElementById("coorStore").innerText = coordStore
+    drawBack(coordStore)
 
-      setTimeout(function(){
-        gameState = "off";
-        document.getElementById("game_state_display").innerText = gameState;
-        visibilySaveScore()
-      }, Number(delay)*Number(numbLoops));
-      visibilySaveScore()
-    }
-
+    //drawCircle(e.pageX, e.pageY)
+    drawList(coordStore)
   })
 
-
-</script>
-<script>
-  // appending score to the table of scores, will need to hook up backend to saves scores to a database
-  var saveScoreButton = document.getElementById("saveStore")
-  saveScoreButton.addEventListener("click", function (){
-    const newScore = document.createElement("li");
-    newScore.innerText = document.getElementById("score_display").innerText;
-    document.getElementById("scoreList").append(newScore);
-    visibilySaveScore()
-  })
-
-  var g = 0;
-  function visibilySaveScore(){
-
-    if (gameState == "on"){
-      saveScoreButton.disabled = true;
-    } else {
-      console.log(g)
-
-      //validator to ensure induvidual cannot spam append item into the list
-      if (Number(g) % 2 == 0){
-        saveScoreButton.disabled = true;
-      } else {
-      saveScoreButton.disabled = false;
-      }
-      g = Number(g)+1
-    }
+  function drawCircle(x,y){
+    const newDiv = document.createElement("div");
+    newDiv.style.borderRadius = "50%";
+    newDiv.style.marginLeft = x - rect.left -25+"px";
+    newDiv.style.marginTop = y - rect.top -25+"px";
+    newDiv.style.position = "absolute";
+    newDiv.style.width = "50px";
+    newDiv.style.height = "50px";
+    newDiv.style.backgroundColor =  "rgb(155, 102, 102)";
+    document.getElementById("canvasUpper").appendChild(newDiv);
   }
 
-  visibilySaveScore()
+  function drawList(arr){
+    const coordRow = document.createElement("li");
+    coordRow.innerText = String(arr[arr.length-2]) + ","+String(arr[arr.length-1]);
+    document.getElementById("displayCoordList").append(coordRow);
+  }
+
+  drawList(coordStore)
 </script>
+
 </body>
 {% endblock %}
 </html>
