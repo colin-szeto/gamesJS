@@ -5,3 +5,5 @@ a playground for testing and learning js and user interactions with js
 - added in circle tracking mouse
 - added in background animation, aim tracker
 - added in a nav bar
+- added in continuous line drawing
+- added in multiple shape background animation
