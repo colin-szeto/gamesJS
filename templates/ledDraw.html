@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends ".base.html" %}
+{% block content %}
+<head>
+  <meta charset="UTF-8">
+  <title>Led Draw</title>
+
+  <style>
+    #c {
+      width: 501px;
+      height: 381px;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+
+<h1>Drawwing</h1>
+<canvas id="c" width="501px" height="381px" ></canvas>
+
+<a href="https://stackoverflow.com/questions/26303911/painting-cells-in-grid">references</a>
+
+<form>
+  <label for="favcolor">Select your favorite color:</label>
+  <input type="color" id="favcolor" name="favcolor" value="#ff0000">
+</form>
+</body>
+
+
+
+<script>
+  var color_picker = document.getElementById("favcolor");
+  var c_canvas = document.getElementById("c");
+  var context = c_canvas.getContext("2d");
+
+  for (var x = 0.5; x < 501; x += 20) {
+    context.moveTo(x, 0);
+    context.lineTo(x, 381);
+  }
+
+  for (var y = 0.5; y < 381; y += 20) {
+    context.moveTo(0, y);
+    context.lineTo(500, y);
+  }
+
+  context.strokeStyle = "#ddd";
+  context.stroke();
+
+  var color_value = "#FF0000";
+
+  function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: evt.clientX - rect.left,
+      y: evt.clientY - rect.top
+    };
+  }
+  function getNearestSquare(position) {
+    var x = position.x;
+    var y = position.y;
+    if (x < 0 || y < 0) return null;
+    x = (Math.floor(x / 20) * 20) + 0.5
+    y = (Math.floor(y / 20) * 20) + 0.5
+    return {x: x, y: y};
+  }
+
+  $(c_canvas).click(function(evt) {
+    var pos = getNearestSquare(getMousePos(c_canvas, evt));
+    if (pos != null) {
+      context.fillStyle=color_value;
+      context.fillRect(pos.x,pos.y,20,20);
+    }
+  });
+
+  var b = 0;
+  $(c_canvas).mousedown(function (){
+    console.log(b)
+    b = number(b)+1;
+  })
+
+  $(c_canvas).mousemove(function (evt){
+
+    //console.log("hovering")
+    var pos = getNearestSquare(getMousePos(c_canvas, evt));
+    if (pos != null) {
+      context.fillStyle=color_value;
+      context.fillRect(pos.x,pos.y,20,20);
+    }
+
+    //console.log(pos)
+  });
+
+  $(color_picker).change(function (){
+    color_value = String(color_picker.value);
+  })
+</script>
+{% endblock %}
+</html>

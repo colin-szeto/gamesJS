@@ -18,6 +18,10 @@ def line():
 def animationMulti():
     return render_template("animationMulti.html")
 
+@app.route("/ledDraw")
+def ledDraw():
+    return render_template("ledDraw.html")
+
 
 if __name__ == "__main__":
     # runs the application on the repl development server
